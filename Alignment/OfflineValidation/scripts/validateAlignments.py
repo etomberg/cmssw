@@ -320,7 +320,7 @@ def createParallelMergeScript( path, validations ):
         #  -> avoids problems with merge script
         repMap["haddLoop"] = "mergeRetCode=0\n"
         repMap["rmUnmerged"] = ("if [[ mergeRetCode -eq 0 ]]; then\n"
-                                "    echo -e \\n\"Merging succeeded, removing original files.\"\n")
+                                "    echo -e \"\\nMerging succeeded, removing original files.\"\n")
         for validation in comparisonLists["OfflineValidationParallel"]:
             repMap["haddLoop"] = validation.appendToMergeParJobs(repMap["haddLoop"])
             repMap["haddLoop"] += "tmpMergeRetCode=${?}\n"
@@ -337,7 +337,7 @@ def createParallelMergeScript( path, validations ):
                                         validation.getRepMap()["eosdir"], f)
                 repMap["rmUnmerged"] += "    cmsRm "+longName+"\n"
         repMap["rmUnmerged"] += ("else\n"
-                                 "    echo -e \\n\"WARNING: Merging failed, unmerged"
+                                 "    echo -e \"\\nWARNING: Merging failed, unmerged"
                                  " files won't be deleted.\\n"
                                  "(Ignore this warning if merging was done earlier)\"\n"
                                  "fi\n")
@@ -540,17 +540,18 @@ To merge the outcome of all validation procedures run TkAlMerge.sh in your valid
     if options.autoMerge:
         # if everything is done as batch job, also submit TkAlMerge.sh to be run
         # after the jobs have finished
-        if ValidationJob.jobCount == ValidationJob.batchCount and config.getGeneral()["jobmode"].split(",")[0] == "lxBatch":
+        general = config.getGeneral()
+        if ValidationJob.jobCount == ValidationJob.batchCount and general["jobmode"].split(",")[0] == "lxBatch":
             print ">             Automatically merging jobs when they have ended"
             repMap = {
-                "commands": config.getGeneral()["jobmode"].split(",")[1],
+                "queue": general["autoMergeQueue"],
                 "jobName": "TkAlMerge",
-                "logDir": config.getGeneral()["logdir"],
+                "logDir": general["logdir"],
                 "script": "TkAlMerge.sh",
                 "bsub": "/afs/cern.ch/cms/caf/scripts/cmsbsub",
                 "conditions": '"' + " && ".join(["ended(" + jobId + ")" for jobId in ValidationJob.batchJobIds]) + '"'
                 }
-            getCommandOutput2("%(bsub)s %(commands)s "
+            getCommandOutput2("%(bsub)s -q %(queue)s "
                               "-o %(logDir)s/%(jobName)s.stdout "
                               "-e %(logDir)s/%(jobName)s.stderr "
                               "-w %(conditions)s "

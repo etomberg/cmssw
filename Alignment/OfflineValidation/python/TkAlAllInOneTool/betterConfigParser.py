@@ -130,6 +130,7 @@ class BetterConfigParser(ConfigParser.ConfigParser):
     def getGeneral( self ):
         defaults = {
             "jobmode":"interactive",
+            "autoMergeQueue": "1nd",
             "datadir":os.getcwd(),
             "logdir":os.getcwd(),
             "eosdir": "",

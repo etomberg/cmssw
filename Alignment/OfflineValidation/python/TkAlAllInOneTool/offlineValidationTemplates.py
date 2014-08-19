@@ -405,7 +405,7 @@ mergeOfflineParallelResults="""
 # if merged file already exists it will be moved to a backup file (~)
 
 # run TkAlOfflinejobs.C
-echo -e "\n\nMerging results from parallel jobs with TkAlOfflineJobsMerge.C"
+echo -e "\\n\\nMerging results from parallel jobs with TkAlOfflineJobsMerge.C"
 #set directory to which TkAlOfflineJobsMerge.C saves the merged file
 # export OUTPUTDIR=.oO[datadir]Oo.
 export OUTPUTDIR=.

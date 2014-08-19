@@ -218,7 +218,7 @@ find . -name "*.stdout" -exec gzip -f {} \;
 ######################################################################
 compareAlignmentsExecution="""
 #merge for .oO[validationId]Oo. if it does not exist or is not up-to-date
-echo -e "\n\nComparing validations"
+echo -e "\\n\\nComparing validations"
 cp .oO[CMSSW_BASE]Oo./src/Alignment/OfflineValidation/scripts/compareFileAges.C .
 root -x -q -b -l "compareFileAges.C(\\\"root://eoscms.cern.ch//eos/cms/store/caf/user/$USER/.oO[eosdir]Oo./.oO[validationId]Oo._result.root\\\", \\\".oO[compareStringsPlain]Oo.\\\")"
 comparisonNeeded=${?}
@@ -240,7 +240,7 @@ fi
 ######################################################################
 extendedValidationExecution="""
 #run extended offline validation scripts
-echo -e "\n\nRunning extended offline validation"
+echo -e "\\n\\nRunning extended offline validation"
 if [[ $HOSTNAME = lxplus[0-9]*\.cern\.ch ]] # check for interactive mode
 then
     rfmkdir -p .oO[workdir]Oo./ExtendedOfflineValidation_Images
@@ -256,12 +256,12 @@ rfmkdir -p .oO[datadir]Oo./ExtendedOfflineValidation_Images
 if [[ $HOSTNAME = lxplus[0-9]*\.cern\.ch ]] # check for interactive mode
 then
     image_files=$(ls --color=never | find .oO[workdir]Oo./ExtendedOfflineValidation_Images/ -name \*ps -o -name \*root)
-    echo -e "\n\nProduced plot files:"
+    echo -e "\\n\\nProduced plot files:"
     #echo ${image_files}
     ls .oO[workdir]Oo./ExtendedOfflineValidation_Images
 else
     image_files=$(ls --color=never | find ExtendedOfflineValidation_Images/ -name \*ps -o -name \*root)
-    echo -e "\n\nProduced plot files:"
+    echo -e "\\n\\nProduced plot files:"
     #echo ${image_files}
     ls ExtendedOfflineValidation_Images
 fi
@@ -270,6 +270,14 @@ for image in ${image_files}
 do
     cp ${image} .oO[datadir]Oo./ExtendedOfflineValidation_Images
 done
+
+#create a .tex-file out of this validation
+echo -e "\\n\\n"
+produceOfflineValidationTex.py .oO[datadir]Oo./ExtendedOfflineValidation_Images
+rfmkdir -p .oO[datadir]Oo./Presentation
+cp presentation.tex .oO[datadir]Oo./Presentation
+cp toPdf.sh .oO[datadir]Oo./Presentation
+
 """
 
 

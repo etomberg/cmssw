@@ -688,9 +688,9 @@ void PlotAlignmentValidation::plotDMR(const std::string& variable, Int_t minHits
       int maxlayer = plotLayers ? plotinfo.nLayers : plotLayerN;
 
       plotinfo.vars = *it;
-      plotinfo.h1 = plotinfo.h2 = plotinfo.h = 0;
 
       for (int layer = minlayer; layer <= maxlayer; layer++) {
+        plotinfo.h1 = plotinfo.h2 = plotinfo.h = 0;
 
 	if (plotinfo.plotPlain) {
 	  plotDMRHistogram(plotinfo, 0, layer);

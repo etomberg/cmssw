@@ -162,8 +162,14 @@ int hadd(const char *filesSeparatedByKommaOrEmpty = "", const char * outputFile 
   // The abort() command is ugly, but much quicker than the clean return()
   // Use of return() can take 90 minutes, while abort() takes 10 minutes
   // (merging 20 jobs with 1M events in total)
+  // (In another test, merging 20 jobs with 5M events took about 60 min with
+  // abort and more than 3 hours with return.)
   // BUT abort creates an error signal and incorrect functioning
-  // at higher level
+  // at higher level. If you want fast runs, uncomment the abort()-line below.
+  // In this case, due to the error signal, the produced .root-files
+  // will not be saved on eos for further use, but validation plots
+  // should be produced normally. To change this, modify the TkAlMerge.sh-file
+  // and/or the template at OfflineValidation/python/TkAlAllInOneTool/configTemplates.py
   // abort();
 
   std::cout << "Now returning from merge_TrackerOfflineValidation.C" << std::endl;
